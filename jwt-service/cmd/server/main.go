@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"jwt-service/internal/config"
-	"jwt-service/internal/domain/usecase"
 	"jwt-service/internal/lib/jwt"
 	"log/slog"
 	"os"

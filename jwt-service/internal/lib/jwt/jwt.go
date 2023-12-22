@@ -1,18 +1,18 @@
 package jwt
 
 import (
-	"jwt-service/internal/domain/entity"
+	"jwt-service/internal/models"
 	"log/slog"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func NewToken(user *entity.User, log *slog.Logger) (string, error) {
+func NewToken(authorization *models.Authorization, log *slog.Logger) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["uid"] = user.ID
-	tokenString, err := token.SignedString([]byte(user.Secret))
+	claims["uid"] = authorization.ID
+	tokenString, err := token.SignedString([]byte(authorization.Secret))
 	if err != nil {
 		log.Error("error signed JWT token")
 		return "", err

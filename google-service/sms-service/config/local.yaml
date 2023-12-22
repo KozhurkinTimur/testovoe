@@ -1,5 +1,4 @@
 env: "local" # local, prod
-secret: "c65a7097-9ee3-475d-b563-b8e3a54ba630"
 # storage_path: "./storage/storage.db"
 # http_server:
 #   address: "localhost:8082"
