@@ -3,7 +3,9 @@ package apiserver
 import (
 	//"io"
 	"net/http"
-	//"testovoe/internal/apiserver/rest/google/handlers"
+	"testovoe/internal/apiserver/rest/google/handlersgoogle"
+	"testovoe/internal/apiserver/rest/sms/handlerssms"
+	"testovoe/internal/apiserver/rest/guest/handlersjwt"
 	"testovoe/internal/config"
 
 	"github.com/gorilla/mux"
@@ -20,15 +22,24 @@ func New(config *config.Config) *APIServer {
 		Router:  mux.NewRouter(),
 	}
 }
-
+// refactor: create intrface for handlers, implement it in handlers packages, inject in Start
 func (s *APIServer) Start() error {
 	s.routers()
 	return http.ListenAndServe(s.Address, s.Router)
 }
-
+// refactor: create intrface for handlers, implement it in handlers packages, inject in routers
 func (s *APIServer) routers() {
-	s.Router.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+	googleHandler := handlersgoogle.New()
+	smsHandler := handlerssms.New()
+	jwtHandler := handlersjwt.New()
 
-	})
+	s.Router.HandleFunc("/jwt/guest", jwtHandler.HandlerGuest).Methods("POST")
+
+	s.Router.HandleFunc("/google/registration", googleHandler.HandlerRegistration).Methods("POST")
+	s.Router.HandleFunc("/google/signin", googleHandler.HandlerSignIn).Methods("GET")
+
+	s.Router.HandleFunc("/sms/registration", smsHandler.HandlerRegistration).Methods("POST")
+	s.Router.HandleFunc("/sms/pay", smsHandler.HandlerPay).Methods("GET")
+	s.Router.HandleFunc("/sms/confirmations", smsHandler.HandlerConfirmations).Methods("POST")
 	
 }
