@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testovoe/internal/apiserver"
 	"testovoe/internal/config"
+
 	// "testovoe/internal/models"
 	// "testovoe/internal/lib/jwt"
 
@@ -31,6 +32,7 @@ func main() {
 	if err != nil {
 		log.Error("doesnt start server ",err)
 	}
+	log.Debug("1111")
 
 }
 

@@ -32,8 +32,9 @@ func (s *APIServer) routers() {
 	googleHandler := handlersgoogle.New()
 	smsHandler := handlerssms.New()
 	jwtHandler := handlersjwt.New()
-
-	s.Router.HandleFunc("/jwt/guest", jwtHandler.HandlerGuest).Methods("POST")
+	// s.Router.HandleFunc("/jwt", handlersjwt.LogHandler(jwtHandler.HandlerGuest)).Methods("GET")
+	s.Router.HandleFunc("/jwt/guest", jwtHandler.HandlerGuest).Methods("GET")
+	s.Router.HandleFunc("/jwt/signin", jwtHandler.HandlerSignIn).Methods("POST")
 
 	s.Router.HandleFunc("/google/registration", googleHandler.HandlerRegistration).Methods("POST")
 	s.Router.HandleFunc("/google/signin", googleHandler.HandlerSignIn).Methods("GET")

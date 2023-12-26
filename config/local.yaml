@@ -1,5 +1,5 @@
 env: "local" # local, prod
-secret: "c65a7097-9ee3-475d-b563-b8e3a54ba630"
+secret: "sasa"
 address: "localhost:8080"
 # storage_path: "./storage/storage.db"
 # http_server:
