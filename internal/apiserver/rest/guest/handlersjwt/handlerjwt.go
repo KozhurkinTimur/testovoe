@@ -1,6 +1,7 @@
 package handlersjwt
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"net/http"
@@ -20,20 +21,28 @@ func New() *JWTHandler {
 }
 
 func (*JWTHandler) HandlerSignIn(w http.ResponseWriter, r *http.Request) {
- 	token, err := jwt.NewToken(&models.Authorization{})
-	 if err != nil {
+	token, err := jwt.NewToken(&models.Authorization{})
+	if err != nil {
 		fmt.Fprintf(w, "Error generate Token for Guest:  %s", err)
 	}
-   fmt.Fprintf(w, "Successefully generate Token for Guest: %s", token)
+	res := map[string]interface{}{
+		"access_token": token,
+	}
+	data, _ := json.Marshal(res)
+	fmt.Fprintf(w, string(data))
 }
 
 func (*JWTHandler) HandlerGuest(w http.ResponseWriter, r *http.Request) {
-	
+
 	token, err := jwt.NewToken(models.New(config.MustLoad()))
 	if err != nil {
 		fmt.Fprintf(w, "Error generate Token for Guest:  %s", err)
 	}
-   fmt.Fprintf(w, "Successefully generate Token for Guest: %s", token)
+	res := map[string]interface{}{
+		"access_token": token,
+	}
+	data, _ := json.Marshal(res)
+	fmt.Fprintf(w, string(data))
 
 }
 
@@ -47,7 +56,7 @@ func (*JWTHandler) HandlerGuest(w http.ResponseWriter, r *http.Request) {
 //         log.Println(fmt.Sprintf("%q", x))
 //         rec := httptest.NewRecorder()
 //         fn(rec, r)
-//         log.Println(fmt.Sprintf("%q", rec.Body))            
+//         log.Println(fmt.Sprintf("%q", rec.Body))
 //     }
 // }
 

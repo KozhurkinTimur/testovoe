@@ -2,81 +2,55 @@ package handlerssms
 
 import (
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
-	"testovoe/internal/storage/postgresql"
+	"testovoe/internal/models"
+	"testovoe/internal/storage"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type SMSHandler struct {
-	Id int
+type RegReq struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
 }
 
-func New() *SMSHandler {
+type SMSHandler struct {
+	repo storage.UserRepository
+	Id   int
+}
+
+func New(repo storage.UserRepository) *SMSHandler {
 	return &SMSHandler{
 		Id: 2,
 	}
 }
 
 func (h *SMSHandler) HandlerRegistration(w http.ResponseWriter, r *http.Request) {
-
 	tokenString := r.Header.Get("Authorization")
 
 	// Убедитесь, что в заголовке "Authorization" ваш токен выглядит примерно так: "Bearer <ваш токен>"
 	// Здесь нужно разобрать токен из заголовка запроса и декодировать его
-
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Ваш код здесь для извлечения секретного ключа для проверки подписи токена
 		return []byte("sasa"), nil
 	})
 
-	if err != nil {
+	if err != nil || !token.Valid {
 		// Обработка ошибок
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		// Токен декодирован и валидный
-		requestBody, err := ioutil.ReadAll(r.Body)
-		defer r.Body.Close()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	
-		// Декодировать JSON тело запроса в map[string]interface{}
-		var bodyMap map[string]interface{}
-		err = json.Unmarshal(requestBody, &bodyMap)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-	
-		// Получить значения из map
-		login, ok1 := bodyMap["login"].(string)
-		password, ok2 := bodyMap["password"].(string)
-		
-		if !ok1 || !ok2 {
-			http.Error(w, "Invalid field types", http.StatusBadRequest)
-			return
-		}
-
-		uid := claims["uid"]
-		db, err = postgresql.Connect()
-		sql := &postgresql.PostgresUserRepository{}
+	var req RegReq
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
-	
-	func (r *PostgresUserRepository) Connect() (*sql.DB, error) {
-		//db, err := sql.Open("
-		sql.Save(login, password, uid.(string))
 
-		w.Write([]byte("Uid: " + fmt.Sprint(uid)))
-	} else {
-		w.WriteHeader(http.StatusUnauthorized)
-	}
+	h.repo.Save(&models.User{
+		Login:    req.Login,
+		Password: req.Password,
+	})
 
 }
 

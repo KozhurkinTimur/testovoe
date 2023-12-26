@@ -5,7 +5,7 @@ import (
 )
 
 type UserRepository interface {
-	Save(user *models.User)
-	FindById(uid string) *models.User
-	FindByLogin(login string) *models.User
+	Save(user *models.User) error
+	FindById(uid string) (*models.User, error)
+	FindByLogin(login string) (*models.User, error)
 }

@@ -2,8 +2,8 @@ package models
 
 type User struct {
 	Id string
-	login string
-	password string
+	Login string
+	Password string
 }
 
 func createUser() *User {

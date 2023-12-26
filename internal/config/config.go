@@ -8,9 +8,9 @@ import (
 )
 
 type Config struct {
-	Env string `yaml:"env" env-defualt:"local"`
+	Env     string `yaml:"env" env-defualt:"local"`
 	Address string `yaml:"address" env-defualt:"localhost:8080"`
-	Secret string `yaml:"secret"`
+	Secret  string `yaml:"secret"`
 	//StoragePath string `yaml:"storage_path" env-required:"true"`
 }
 
@@ -21,11 +21,12 @@ type Config struct {
 // }
 
 func MustLoad() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH is not set")
-	}
+	// configPath := os.Getenv("CONFIG_PATH")
+	// if configPath == "" {
+	// 	log.Fatal("CONFIG_PATH is not set")
+	// }
 
+	configPath := "./config/local.yaml"
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("config file does not exist: %s", configPath)
 	}
