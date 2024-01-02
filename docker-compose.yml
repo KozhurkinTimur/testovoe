@@ -11,21 +11,21 @@ services:
       - POSTGRES_PASSWORD=root
     image: postgres:14.3-alpine
   
-  api:
-    container_name: test-app
-    hostname: apihost
-    build:
-      context: .
-      args:
-        TARGET_DIR: /app
-        GOBIN: /app
-    volumes:
-      - .:/go/src/github.com/testovoe
-      - $GOPATH/pkg:/go/pkg
-    depends_on:
-      - db_user
-    environment:
-      TARGET_DIR: /app
-      GOBIN: /app
-    ports:
-      - "8080:8080"
+  # api:
+  #   container_name: test-app
+  #   hostname: apihost
+  #   build:
+  #     context: .
+  #     args:
+  #       TARGET_DIR: /app
+  #       GOBIN: /app
+  #   volumes:
+  #     - .:/go/src/github.com/testovoe
+  #     - $GOPATH/pkg:/go/pkg
+  #   depends_on:
+  #     - db_user
+  #   environment:
+  #     TARGET_DIR: /app
+  #     GOBIN: /app
+  #   ports:
+  #     - "8080:8080"

@@ -10,7 +10,6 @@ type Authorization struct {
 	Id     uuid.UUID
 	Secret string
 	Role   string
-	//Provider int
 }
 
 func New(config *config.Config) *Authorization {

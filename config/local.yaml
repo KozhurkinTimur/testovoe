@@ -1,8 +1,1 @@
-env: "local" # local, prod
 secret: "sasa"
-address: "localhost:8080"
-# storage_path: "./storage/storage.db"
-# http_server:
-#   address: "localhost:8082"
-#   timeout: 4s
-#   idle_timeout: 60s
